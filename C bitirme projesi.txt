@@ -1,0 +1,128 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Kullanıcı bilgilerini saklamak için struct yapısı
+struct BankaHesabi {
+    char isim[50];
+    int hesapNumarasi;
+    float bakiye;
+};
+
+// Kullanıcıyı kaydetmek için fonksiyon
+void kaydet(struct BankaHesabi *hesaplar, int *hesapSayisi) {
+    printf("Isim: ");
+    scanf("%s", hesaplar[*hesapSayisi].isim);
+    printf("Hesap Numarasi: ");
+    scanf("%d", &hesaplar[*hesapSayisi].hesapNumarasi);
+    printf("Baslangic Bakiyesi: ");
+    scanf("%f", &hesaplar[*hesapSayisi].bakiye);
+
+    (*hesapSayisi)++;
+    printf("Hesap basariyla kaydedildi.\n\n");
+}
+
+// Kullanıcıyı güncellemek için fonksiyon
+void guncelle(struct BankaHesabi *hesaplar, int hesapSayisi) {
+    int hesapNumarasi;
+    printf("Guncellenecek hesap numarasini girin: ");
+    scanf("%d", &hesapNumarasi);
+
+    int i;
+    for (i = 0; i < hesapSayisi; i++) {
+        if (hesaplar[i].hesapNumarasi == hesapNumarasi) {
+            printf("Yeni isim: ");
+            scanf("%s", hesaplar[i].isim);
+            printf("Yeni bakiye: ");
+            scanf("%f", &hesaplar[i].bakiye);
+            printf("Hesap basariyla guncellendi.\n\n");
+            return;
+        }
+    }
+
+    printf("Hesap bulunamadi.\n\n");
+}
+
+// Kullanıcıyı silmek için fonksiyon
+void sil(struct BankaHesabi *hesaplar, int *hesapSayisi) {
+    int hesapNumarasi;
+    printf("Silinecek hesap numarasini girin: ");
+    scanf("%d", &hesapNumarasi);
+
+    int i;
+    for (i = 0; i < *hesapSayisi; i++) {
+        if (hesaplar[i].hesapNumarasi == hesapNumarasi) {
+            // Hesabı silmek için kaydı kaydırma
+            for (int j = i; j < *hesapSayisi - 1; j++) {
+                strcpy(hesaplar[j].isim, hesaplar[j + 1].isim);
+                hesaplar[j].hesapNumarasi = hesaplar[j + 1].hesapNumarasi;
+                hesaplar[j].bakiye = hesaplar[j + 1].bakiye;
+            }
+
+            (*hesapSayisi)--;
+            printf("Hesap basariyla silindi.\n\n");
+            return;
+        }
+    }
+
+    printf("Hesap bulunamadi.\n\n");
+}
+
+// Hesap bilgilerini görüntülemek için fonksiyon
+void goruntule(struct BankaHesabi *hesaplar, int hesapSayisi) {
+    int hesapNumarasi;
+    printf("Goruntulemek istediginiz hesap numarasini girin: ");
+    scanf("%d", &hesapNumarasi);
+
+    int i;
+    for (i = 0; i < hesapSayisi; i++) {
+        if (hesaplar[i].hesapNumarasi == hesapNumarasi) {
+            printf("Isim: %s\n", hesaplar[i].isim);
+            printf("Hesap Numarasi: %d\n", hesaplar[i].hesapNumarasi);
+            printf("Bakiye: %.2f\n\n", hesaplar[i].bakiye);
+            return;
+        }
+    }
+
+    printf("Hesap bulunamadi.\n\n");
+}
+
+int main() {
+    struct BankaHesabi hesaplar[100]; // Maksimum 100 hesap tutulabilir
+    int hesapSayisi = 0;
+    int secim;
+
+    
+    do {
+        switch (secim) {
+            case 1:
+                kaydet(hesaplar, &hesapSayisi);
+                break;
+            case 2:
+                guncelle(hesaplar, hesapSayisi);
+                break;
+            case 3:
+                sil(hesaplar, &hesapSayisi);
+                break;
+            case 4:
+                goruntule(hesaplar, hesapSayisi);
+                break;
+            case 5:
+                printf("Programdan cikiliyor...\n");
+                break;
+            default:
+                printf("Gecersiz secim!\n\n");
+                break;
+        }        printf("Banka Hesap Yonetimi Sistemi\n");
+        printf("1. Kayit Olustur\n");
+        printf("2. Hesabi Guncelle\n");
+        printf("3. Hesabi Sil\n");
+        printf("4. Hesap Goruntule\n");
+        printf("5. Cikis\n");
+        printf("Seciminizi yapin: ");
+        scanf("%d", &secim);
+
+    } while (secim != 5);
+
+    return 0;
+}
